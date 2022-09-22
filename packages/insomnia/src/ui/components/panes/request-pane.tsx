@@ -4,7 +4,7 @@ import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 
-import { getContentTypeFromHeaders } from '../../../common/constants';
+import { getContentTypeFromHeaders, getAuthTypeName } from '../../../common/constants';
 import * as models from '../../../models';
 import { queryAllWorkspaceUrls } from '../../../models/helpers/query-all-workspace-urls';
 import { update } from '../../../models/helpers/request-operations';
@@ -137,6 +137,7 @@ export const RequestPane: FC<Props> = ({
   const numHeaders = request.headers.filter(h => !h.disabled).length;
   const urlHasQueryParameters = request.url.indexOf('?') >= 0;
   const contentType = getContentTypeFromHeaders(request.headers) || request.body.mimeType;
+  const authType = getAuthTypeName(request.authentication.type)
   return (
     <Pane type="request">
       <PaneHeader>
@@ -156,10 +157,14 @@ export const RequestPane: FC<Props> = ({
       <Tabs className={classnames(paneBodyClasses, 'react-tabs')}>
         <TabList>
           <Tab tabIndex="-1">
-            <ContentTypeDropdown onChange={updateRequestMimeType} />
+            <button aria-label={contentType}>
+              <ContentTypeDropdown onChange={updateRequestMimeType} />
+            </button>
           </Tab>
           <Tab tabIndex="-1">
-            <AuthDropdown />
+            <button aria-label={authType}>
+              <AuthDropdown />
+            </button>
           </Tab>
           <Tab tabIndex="-1">
             <button>
