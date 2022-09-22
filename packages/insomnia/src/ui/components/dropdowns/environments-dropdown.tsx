@@ -61,7 +61,7 @@ export const EnvironmentsDropdown: FC<Props> = ({
                 className="space-right"
                 position="right"
               >
-                <i className="fa fa-exclamation-triangle notice" />
+                <i aria-label="exclamation-triangle" className="fa fa-exclamation-triangle notice" />
               </Tooltip>
             )}
             <div className="sidebar__menu__thing__text">

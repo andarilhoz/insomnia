@@ -334,7 +334,7 @@ async function _updateElementText(render: any, mark: any, text: any, renderConte
 
   if (dataError === 'on') {
     el.setAttribute('data-error', dataError);
-    el.innerHTML = '<label><i class="fa fa-exclamation-triangle"></i></label>' + cleanedStr;
+    el.innerHTML = '<label><i aria-label="exclamation-triangle" class="fa fa-exclamation-triangle"></i></label>' + cleanedStr;
   } else {
     el.innerHTML = '<label></label>' + innerHTML;
   }
