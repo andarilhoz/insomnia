@@ -121,10 +121,11 @@ const useDocumentActionPlugins = ({ workspace, apiSpec, project }: Props) => {
 export const WorkspaceCardDropdown: FC<Props> = props => {
   const { handleDelete, handleDuplicate, handleRename } = useWorkspaceHandlers(props);
   const { refresh, renderPluginDropdownItems } = useDocumentActionPlugins(props);
+  let label: string = props.apiSpec.fileName;
 
   return (
     <Dropdown beside onOpen={refresh}>
-      <DropdownButton><SvgIcon icon="ellipsis" /></DropdownButton>
+      <DropdownButton aria-label={label}><SvgIcon icon="ellipsis" /></DropdownButton>
 
       <DropdownItem onClick={handleDuplicate}>Duplicate</DropdownItem>
       <DropdownItem onClick={handleRename}>Rename</DropdownItem>
