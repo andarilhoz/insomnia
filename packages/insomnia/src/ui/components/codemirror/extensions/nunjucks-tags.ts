@@ -233,6 +233,10 @@ async function _highlightNunjucksTags(this: CodeMirror.Editor, render: any, rend
 
       el.addEventListener('keydown', event => {
         const { keyCode } = event;
+        if(keyCode === keyCodes.enter.keyCode){
+          el.click();
+        }
+          
         const pressedArrows = (keyCode === keyCodes.leftarrow.keyCode || keyCode === keyCodes.rightarrow.keyCode);
         if(pressedArrows){
           const isRightArrow = keyCode === keyCodes.rightarrow.keyCode;
