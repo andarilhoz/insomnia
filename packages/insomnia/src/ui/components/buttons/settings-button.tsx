@@ -26,7 +26,7 @@ export const SettingsButton: FunctionComponent = () => {
           </>
         }
       >
-        <CircleButton data-testid="settings-button" onClick={showSettingsModal}>
+        <CircleButton data-testid="settings-button" aria-label="settings" onClick={showSettingsModal}>
           <SvgIcon icon="gear" />
         </CircleButton>
       </Tooltip>

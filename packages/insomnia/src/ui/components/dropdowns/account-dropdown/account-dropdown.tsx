@@ -40,7 +40,7 @@ export const AccountDropdownButton: FunctionComponent = () => {
       <Dropdown>
         <DropdownButton noWrap>
           <Tooltip delay={1000} position="bottom" message="Account">
-            <CircleButton>
+            <CircleButton aria-label="account" >
               <SvgIcon icon="user" />
             </CircleButton>
           </Tooltip>

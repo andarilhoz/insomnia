@@ -24,7 +24,7 @@ export const DashboardSortDropdown: FC<DashboardSortDropdownProps> = ({ onSelect
     <Dropdown
       className="margin-left"
       renderButton={
-        <Button>
+        <Button aria-label="sort">
           <i className="fa fa-sort" />
         </Button>
       }
