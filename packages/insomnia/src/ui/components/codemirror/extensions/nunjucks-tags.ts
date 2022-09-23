@@ -6,6 +6,7 @@ import { getTagDefinitions } from '../../../../templating/index';
 import { tokenizeTag } from '../../../../templating/utils';
 import { showModal } from '../../modals/index';
 import { NunjucksModal } from '../../modals/nunjucks-modal';
+import { keyboardKeys as keyCodes } from '../../../../common/keyboard-keys';
 
 CodeMirror.defineExtension('enableNunjucksTags', function(
   this: CodeMirror.Editor,
@@ -127,6 +128,11 @@ async function _highlightNunjucksTags(this: CodeMirror.Editor, render: any, rend
       el.setAttribute('draggable', 'true');
       el.setAttribute('data-error', 'off');
       el.setAttribute('data-template', tok.string);
+      el.setAttribute('tabindex','0');
+      const str = tok.string.replace(/\\/g, '');
+      const cleanedString = cleanNunjucksString(str);
+      el.setAttribute('aria-label', `${cleanedString} variable`);
+
       const mark = this.markText(start, end, {
         // @ts-expect-error not a known property of TextMarkerOptions
         __nunjucks: true,
@@ -224,6 +230,16 @@ async function _highlightNunjucksTags(this: CodeMirror.Editor, render: any, rend
       el.addEventListener('drop', event => {
         event.stopPropagation();
       });
+
+      el.addEventListener('keydown', event => {
+        const { keyCode } = event;
+        const pressedArrows = (keyCode === keyCodes.leftarrow.keyCode || keyCode === keyCodes.rightarrow.keyCode);
+        if(pressedArrows){
+          const isRightArrow = keyCode === keyCodes.rightarrow.keyCode;
+          doc.getCursor().ch = isRightArrow ? tok.end : tok.start;
+          doc.getEditor()?.focus();
+        }
+      })
     }
   }
 
@@ -270,12 +286,7 @@ async function _updateElementText(render: any, mark: any, text: any, renderConte
   let dataError = '';
   const str = text.replace(/\\/g, '');
   const tagMatch = str.match(/{% *([^ ]+) *.*%}/);
-  const cleanedStr = str
-    .replace(/^{%/, '')
-    .replace(/%}$/, '')
-    .replace(/^{{/, '')
-    .replace(/}}$/, '')
-    .trim();
+  const cleanedStr = cleanNunjucksString(str);
 
   try {
     if (tagMatch) {
@@ -340,4 +351,13 @@ async function _updateElementText(render: any, mark: any, text: any, renderConte
   }
 
   mark.changed();
+}
+
+function cleanNunjucksString(input: string){
+  return input
+          .replace(/^{%/, '')
+          .replace(/%}$/, '')
+          .replace(/^{{/, '')
+          .replace(/}}$/, '')
+          .trim();
 }

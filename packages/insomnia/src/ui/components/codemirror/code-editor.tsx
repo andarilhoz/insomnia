@@ -992,6 +992,37 @@ export class UnconnectedCodeEditor extends Component<CodeEditorProps, State> {
     if (this.props.onKeyDown && !doc.isHintDropdownActive()) {
       this.props.onKeyDown(event, doc.getValue());
     }
+
+    const { keyCode } = event;
+    const pressedArrows = (keyCode === keyCodes.leftarrow.keyCode || keyCode === keyCodes.rightarrow.keyCode)
+    if(pressedArrows){
+      const isRightArrow = keyCode === keyCodes.rightarrow.keyCode
+      this._codemirrorCheckCaretPosition(doc, isRightArrow);
+    }
+  }
+
+  _codemirrorCheckCaretPosition(doc: CodeMirror.Editor, isRightArrow: boolean) {
+    const cursor = doc.getCursor();
+    const currentPosMarks = doc.findMarksAt(cursor);
+
+    if(currentPosMarks[0].replacedWith == null) {
+      return;
+    }
+
+    const futurePosition : CodeMirror.Position = {
+      ch: cursor.ch,
+      line: cursor.line
+    }
+
+    futurePosition.ch += isRightArrow ? 1 : -1;
+    
+    const marksInFuturePos = doc.findMarksAt(futurePosition)
+    if(marksInFuturePos[0].replacedWith == null) {
+      return;
+    }
+
+    cursor.ch = futurePosition.ch;
+    marksInFuturePos[0].replacedWith.focus();
   }
 
   _codemirrorEndCompletion() {
